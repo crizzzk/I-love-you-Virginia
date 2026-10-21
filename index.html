@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para ti, mi amor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,400&family=Press+Start+2P&family=VT323&family=Fredoka:wght@500;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="decos" id="decos" aria-hidden="true"></div>
+
+<!-- Dibujo reutilizable de la rosa y el ramo -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="pet" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#ff4d6d"/><stop offset=".55" stop-color="#c1072f"/><stop offset="1" stop-color="#5c0016"/></radialGradient>
+    <symbol id="rosa" viewBox="0 0 100 100">
+      <g fill="url(#pet)" stroke="#3d000e" stroke-width=".8">
+        <circle cx="50" cy="50" r="46"/>
+        <path d="M50 8c20 4 38 20 38 42S70 92 50 92 12 72 12 50 30 12 50 8z" opacity=".9" transform="rotate(25 50 50)"/>
+        <circle cx="50" cy="50" r="33"/>
+        <path d="M22 50c0-18 12-30 28-30s28 12 28 30-12 30-28 30" fill="none" stroke="#ff8aa0" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="21"/>
+        <path d="M36 50c0-10 6-16 14-16s14 6 14 16-6 14-14 14" fill="none" stroke="#ff8aa0" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="10"/>
+        <path d="M44 50c0-5 3-8 7-8" fill="none" stroke="#ffb3c1" stroke-width="1.2"/>
+      </g>
+    </symbol>
+    <symbol id="ramo" viewBox="0 0 300 380">
+      <g fill="#1d4a2a" opacity=".9"><ellipse cx="60" cy="300" rx="55" ry="18" transform="rotate(-35 60 300)"/><ellipse cx="190" cy="330" rx="60" ry="18" transform="rotate(25 190 330)"/><ellipse cx="40" cy="200" rx="48" ry="16" transform="rotate(-60 40 200)"/></g>
+      <use href="#rosa" x="20" y="190" width="130" height="130"/>
+      <use href="#rosa" x="130" y="250" width="120" height="120"/>
+      <use href="#rosa" x="60" y="80" width="115" height="115"/>
+      <use href="#rosa" x="-10" y="60" width="80" height="80"/>
+      <g fill="#e8c27a"><circle cx="200" cy="230" r="3"/><circle cx="230" cy="290" r="2.5"/><circle cx="150" cy="60" r="3"/><circle cx="25" cy="170" r="2.5"/><circle cx="100" cy="355" r="3"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ================= Pantalla de huella ================= -->
+<div id="lock">
+  <h1>Para ti, mi amor</h1>
+
+  <div id="scan" role="button" tabindex="0" aria-label="Mantén presionada la huella para entrar">
+    <!-- Anillo exterior con marcas que giran -->
+    <svg class="ticks" viewBox="0 0 300 300" aria-hidden="true"><g id="tickG"></g></svg>
+    <!-- Anillo de progreso -->
+    <svg class="ring" viewBox="0 0 300 300" aria-hidden="true">
+      <circle class="pista" cx="150" cy="150" r="128"/>
+      <circle id="prog" cx="150" cy="150" r="128"/>
+    </svg>
+    <!-- Esquinas tipo escáner -->
+    <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i>
+    <!-- Huella: base tenue + capa brillante que se revela -->
+    <div class="huella">
+      <svg class="base" viewBox="0 0 120 150" aria-hidden="true"><g id="ridgesBase"></g></svg>
+      <svg class="lit"  viewBox="0 0 120 150" aria-hidden="true"><g id="ridgesLit"></g></svg>
+      <div class="barrido"></div>
+    </div>
+    <b id="pct">0%</b>
+  </div>
+
+  <p id="estado">Mantén presionada tu huella</p>
+  <p class="mini">Solo para ti ♥</p>
+</div>
+
+<!-- ================= Portada ================= -->
+<section id="hero">
+  <svg class="rosas izq" viewBox="0 0 300 380"><use href="#ramo"/></svg>
+  <svg class="rosas der" viewBox="0 0 300 380"><use href="#ramo"/></svg>
+  <h2 class="titulo">Tú <i>y</i> Yo</h2>
+  <p class="sub" id="frase"></p>
+  <div class="contador" role="timer" aria-label="Tiempo juntos">
+    <div><b id="d">0</b><span>días</span></div>
+    <div><b id="h">0</b><span>horas</span></div>
+    <div><b id="m">0</b><span>minutos</span></div>
+    <div><b id="s">0</b><span>segundos</span></div>
+  </div>
+  <p class="desde" id="desde"></p>
+  <a class="bajar" href="#fotos" aria-label="Ver más">⌄</a>
+</section>
+
+<!-- ================= Fotos ================= -->
+<section id="fotos">
+  <h2 class="h2">Nuestras fotos</h2>
+  <p class="lead">Cada una guarda un pedacito de nosotros</p>
+  <div class="galeria" id="galeria"></div>
+</section>
+
+<!-- ================= Banda sonora ================= -->
+<section id="banda">
+  <div class="cebra"></div>
+  <div id="disco-grande"></div>
+  <h2 class="h2">Nuestra banda sonora</h2>
+  <p class="lead" id="bandaTexto"></p>
+  <div class="canciones" id="canciones"></div>
+  <div class="cebra"></div>
+</section>
+
+<!-- ================= Carta (sobre) ================= -->
+<section id="carta">
+  <p class="etq">una carta</p>
+  <div class="linea"></div>
+  <h2 class="h2">Ábrela despacio</h2>
+
+  <div class="sobre-wrap">
+    <button class="sobre" id="sobre" type="button" aria-label="Toca el sobre para abrir la carta">
+      <span class="atras"></span>
+      <span class="hoja"></span>
+      <span class="frente izq"></span><span class="frente der"></span><span class="frente aba"></span>
+      <span class="solapa"></span>
+      <span class="sello" id="sello"></span>
+    </button>
+    <p class="toca" id="toca">toca el sobre para abrir</p>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Tu carta"></div>
+  <button id="latido" type="button">Toca si me quieres</button>
+</section>
+
+<!-- ================= Final ================= -->
+<section id="final">
+  <canvas id="petalos" aria-hidden="true"></canvas>
+  <div class="final-txt">
+    <p class="f-pre" id="fPre"></p>
+    <h2 class="f-l1" id="fL1"></h2>
+    <h2 class="f-l2" id="fL2"></h2>
+    <p class="f-sub" id="fSub"></p>
+    <p class="f-firma" id="fFirma"></p>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
